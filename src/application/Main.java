@@ -246,11 +246,31 @@ public class Main extends Application {
 
 	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog)
 	{
-		int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
-		System.out.println(row);
-		System.out.println(bookCatalog.get(row).title);
+		Book meep = availableBooksTableView.getSelectionModel().getSelectedItem();
 		
-		bookCatalog.get(row).rentBook();
+		int numOfBooks = bookCatalog.size(); 
+		
+		System.out.println(meep.title);
+		
+		meep.rentBook();
+		
+//		System.out.println(row);
+//		System.out.println(bookCatalog.get(row).title);
+//		
+//		
+//		bookCatalog.get(row).rentBook();
+//		
+//		if(row >= 0)
+//		{
+//			availableBooksTableView.getItems().remove(row);
+//		}
+		
+		for (int y = 0; y < numOfBooks; y++)
+		{
+			System.out.println(bookCatalog.get(y).getTitle());
+			System.out.println(bookCatalog.get(y).getStatus());
+			
+		}
 		
 		return bookCatalog;
 	}
