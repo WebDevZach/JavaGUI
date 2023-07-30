@@ -26,7 +26,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
-		Book[] bookCatalog = new Book[0];
+		
+		ArrayList<Book> bookCatalog = new ArrayList<>();
 
 		VBox layout1 = new VBox();
 		layout1.setSpacing(35);
@@ -129,7 +130,7 @@ public class Main extends Application {
 	}
 	
 	
-	public Book[] addNewBook(Book[] bookCatalog)
+	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog)
 	{
 		String bookTitle = bookTitleTf.getText();
 		String author =  authorTf.getText();
@@ -138,31 +139,23 @@ public class Main extends Application {
 		
 		
 
-		int numOfBooks = bookCatalog.length;
-		
-	
+		int numOfBooks = bookCatalog.size();;
 		
 	
 
 		// Sets the id of the book
 		newBook.id = numOfBooks + 1;
 
-		// Creates a new array that is one element bigger to hold the new book
-		Book[] newBookCatalog = new Book[numOfBooks + 1];
+		
 
-		int x;
+		bookCatalog.add(newBook);
 
-		// Copies all existing elements into the new array
-		for (x = 0; x < numOfBooks; x++) {
-			newBookCatalog[x] = bookCatalog[x];
+		for(int x = 0; x < numOfBooks; x++)
+		{
+			System.out.println(bookCatalog.get(x).title);
 		}
 
-		// Puts the new book at the end of the array
-		newBookCatalog[x] = newBook;
-		
-		System.out.println(bookCatalog[0].title);
-
-		return newBookCatalog;
+		return bookCatalog;
 	}
 	
 	
