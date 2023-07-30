@@ -20,9 +20,15 @@ public class Main extends Application {
 
 	private TextField bookTitleTf;
 	private TextField authorTf;
+	private Scene scene1;
+	private Stage primaryStage;
+	private TableView<Book> availableBooksTableView;
+	private Scene rentBookScene;
 
 	@Override
 	public void start(Stage primaryStage) {
+		
+		this.primaryStage = primaryStage;
 
 		ArrayList<Book> bookCatalog = new ArrayList<>();
 		
@@ -40,7 +46,7 @@ public class Main extends Application {
 		BorderPane menuBorderPane = new BorderPane();
 		menuBorderPane.setTop(menuLayout);
 		menuLayout.setPadding(new Insets(30, 0, 0, 150));
-		Scene scene1 = new Scene(menuBorderPane, 400, 300);
+		scene1 = new Scene(menuBorderPane, 400, 300);
 
 		
 		
@@ -103,11 +109,11 @@ public class Main extends Application {
 
 		BorderPane rentBookBorderPane = new BorderPane();
 		rentBookBorderPane.setBottom(rentBookHBox);
-		Scene rentBookScene = new Scene(rentBookBorderPane, 400, 300);
+		rentBookScene = new Scene(rentBookBorderPane, 400, 300);
 		
 		//Menu button to switch to rent book scene 
 		Button rentButton = new Button("     Rent a book    ");
-		rentButton.setOnAction(e -> primaryStage.setScene(rentBookScene));
+		rentButton.setOnAction(e -> updateTable(bookCatalog));
 		menuLayout.getChildren().add(rentButton);
 		
 		//Switch back menu button
@@ -121,7 +127,7 @@ public class Main extends Application {
 		rentBookHBox.getChildren().add(rentBookButton);
 		
 		//Table view for available books
-		TableView<Book> availableBooksTableView = new TableView();
+		availableBooksTableView = new TableView();
 		rentBookBorderPane.setCenter(availableBooksTableView);
 		
 		availableBooksTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -192,7 +198,15 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
-	
+	public void updateTable(ArrayList<Book> bookCatalog)
+	{
+		// Update the TableView data
+	    availableBooksTableView.getItems().clear();
+	    availableBooksTableView.getItems().addAll(bookCatalog);
+
+	    // Switches to rent book scene
+	    primaryStage.setScene(rentBookScene);
+	}
 	
 	
 	
@@ -210,10 +224,10 @@ public class Main extends Application {
 
 		bookCatalog.add(newBook);
 
-		for (int x = 0; x < numOfBooks; x++) {
-			System.out.println(bookCatalog.get(x).title);
-		}
 
+		bookTitleTf.clear();
+		authorTf.clear();
+		
 		return bookCatalog;
 	}
 
