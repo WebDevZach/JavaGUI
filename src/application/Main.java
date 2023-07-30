@@ -121,9 +121,9 @@ public class Main extends Application {
 		switchToMenuFromRentBookButton.setOnAction(e -> primaryStage.setScene(scene1));
 		rentBookHBox.getChildren().add(switchToMenuFromRentBookButton);
 		
-		//Button to add a new book to the catalog
+		//Button to rent a book
 		Button rentBookButton = new Button("Rent Book");
-		rentBookButton.setOnAction(e -> addNewBook(bookCatalog));
+		rentBookButton.setOnAction(e -> rentBook(bookCatalog));
 		rentBookHBox.getChildren().add(rentBookButton);
 		
 		//Table view for available books
@@ -231,6 +231,13 @@ public class Main extends Application {
 		return bookCatalog;
 	}
 
+	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog)
+	{
+		int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
+		System.out.println(row);
+		
+		return bookCatalog;
+	}
 	
 	
 	
