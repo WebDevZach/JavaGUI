@@ -18,6 +18,11 @@ public class Book {
 		this.status = "available";
 	}
 	
+	public String getTitle()
+	{
+		return title;
+	}
+	
 
 	
 	

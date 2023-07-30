@@ -6,12 +6,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import java.util.ArrayList;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 
 public class Main extends Application {
 
@@ -29,23 +32,23 @@ public class Main extends Application {
 
 		VBox menuLayout = new VBox();
 		menuLayout.setSpacing(35);
-		BorderPane borderPane = new BorderPane();
-		borderPane.setTop(menuLayout);
+		BorderPane menuBorderPane = new BorderPane();
+		menuBorderPane.setTop(menuLayout);
 		menuLayout.setPadding(new Insets(30, 0, 0, 150));
-		Scene scene1 = new Scene(borderPane, 400, 300);
+		Scene scene1 = new Scene(menuBorderPane, 400, 300);
 
 		
 		
 		/* ADD BOOK SECTION */
 		
 		
-		HBox hBox = new HBox();
-		hBox.setSpacing(10);
-		hBox.setPadding(new Insets(0, 0, 20, 200));
+		HBox addBookHBox = new HBox();
+		addBookHBox.setSpacing(10);
+		addBookHBox.setPadding(new Insets(0, 0, 20, 200));
 
-		BorderPane addNewBookLayout = new BorderPane();
-		addNewBookLayout.setBottom(hBox);
-		Scene addNewBookScene = new Scene(addNewBookLayout, 400, 300);
+		BorderPane addBookBorderPane = new BorderPane();
+		addBookBorderPane.setBottom(addBookHBox);
+		Scene addNewBookScene = new Scene(addBookBorderPane, 400, 300);
 		
 		//Menu button to switch to add new book scene
 		Button addButton = new Button(" Add a new book ");
@@ -55,17 +58,17 @@ public class Main extends Application {
 		//Switch back menu button
 		Button switchToMenuFromAddBookButton = new Button("Menu");
 		switchToMenuFromAddBookButton.setOnAction(e -> primaryStage.setScene(scene1));
-		hBox.getChildren().add(switchToMenuFromAddBookButton);
+		addBookHBox.getChildren().add(switchToMenuFromAddBookButton);
 		
 		//Button to add a new book to the catalog
-		Button addNewBook = new Button("Add Book");
-		addNewBook.setOnAction(e -> addNewBook(bookCatalog));
-		hBox.getChildren().add(addNewBook);
+		Button addNewBookButton = new Button("Add Book");
+		addNewBookButton.setOnAction(e -> addNewBook(bookCatalog));
+		addBookHBox.getChildren().add(addNewBookButton);
 
 		//Grid layout for text fields
-		GridPane gridPane = new GridPane();
-		gridPane.setHgap(10);
-		gridPane.setVgap(10);
+		GridPane addBookGridPane = new GridPane();
+		addBookGridPane.setHgap(10);
+		addBookGridPane.setVgap(10);
 
 		//Labels and text fields
 		Label bookTitleLabel = new Label("Title");
@@ -75,22 +78,27 @@ public class Main extends Application {
 		authorTf = new TextField();
 
 		//Adds labels and fields to grid
-		gridPane.add(bookTitleLabel, 0, 0);
-		gridPane.add(authorLabel, 0, 1);
-		gridPane.add(bookTitleTf, 1, 0);
-		gridPane.add(authorTf, 1, 1);
+		addBookGridPane.add(bookTitleLabel, 0, 0);
+		addBookGridPane.add(authorLabel, 0, 1);
+		addBookGridPane.add(bookTitleTf, 1, 0);
+		addBookGridPane.add(authorTf, 1, 1);
 
 		//Adds grid to layout
-		addNewBookLayout.setCenter(gridPane);
-		gridPane.setPadding(new Insets(100, 0, 0, 90));
+		addBookBorderPane.setCenter(addBookGridPane);
+		addBookGridPane.setPadding(new Insets(100, 0, 0, 90));
 
 		
 		
 		/* RENT BOOK SECTION */
 		
-		
-		VBox rentBooklayout = new VBox();
-		Scene rentBookScene = new Scene(rentBooklayout, 400, 300);
+	
+		HBox rentBookHBox = new HBox();
+		rentBookHBox.setSpacing(10);
+		rentBookHBox.setPadding(new Insets(0, 0, 20, 200));
+
+		BorderPane rentBookBorderPane = new BorderPane();
+		rentBookBorderPane.setBottom(rentBookHBox);
+		Scene rentBookScene = new Scene(rentBookBorderPane, 400, 300);
 		
 		//Menu button to switch to rent book scene 
 		Button rentButton = new Button("     Rent a book    ");
@@ -100,7 +108,17 @@ public class Main extends Application {
 		//Switch back menu button
 		Button switchToMenuFromRentBookButton = new Button("Menu");
 		switchToMenuFromRentBookButton.setOnAction(e -> primaryStage.setScene(scene1));
-		rentBooklayout.getChildren().add(switchToMenuFromRentBookButton);
+		rentBookHBox.getChildren().add(switchToMenuFromRentBookButton);
+		
+		//Button to add a new book to the catalog
+		Button rentBookButton = new Button("Rent Book");
+		rentBookButton.setOnAction(e -> addNewBook(bookCatalog));
+		rentBookHBox.getChildren().add(rentBookButton);
+		
+		TableView availableBooksTableView = new TableView();
+		TableColumn bookTitleColumn = new TableColumn<Book, String>("Book Title");
+		bookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("bookTitle"));
+
 
 
 		
