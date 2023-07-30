@@ -25,7 +25,12 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		ArrayList<Book> bookCatalog = new ArrayList<>();
+		
+		Book meep = new Book("jimmy", "johns");
+		Book zeep = new Book("big", "chuck");
 
+		bookCatalog.add(meep);
+		bookCatalog.add(zeep);
 		
 		
 		/* MENU SECTION */
@@ -94,7 +99,7 @@ public class Main extends Application {
 	
 		HBox rentBookHBox = new HBox();
 		rentBookHBox.setSpacing(10);
-		rentBookHBox.setPadding(new Insets(0, 0, 20, 200));
+		rentBookHBox.setPadding(new Insets(0, 0, 10, 250));
 
 		BorderPane rentBookBorderPane = new BorderPane();
 		rentBookBorderPane.setBottom(rentBookHBox);
@@ -115,11 +120,31 @@ public class Main extends Application {
 		rentBookButton.setOnAction(e -> addNewBook(bookCatalog));
 		rentBookHBox.getChildren().add(rentBookButton);
 		
-		TableView availableBooksTableView = new TableView();
-		TableColumn bookTitleColumn = new TableColumn<Book, String>("Book Title");
-		bookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("bookTitle"));
+		//Table view for available books
+		TableView<Book> availableBooksTableView = new TableView();
+		rentBookBorderPane.setCenter(availableBooksTableView);
+		
+		availableBooksTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
+		TableColumn bookTitleColumn = new TableColumn<Book, String>("Title");
+		bookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
+		
+		TableColumn bookAuthorColumn = new TableColumn<Book, String>("Author");
+		bookAuthorColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
+		
+		availableBooksTableView.getColumns().add(bookTitleColumn);
+		availableBooksTableView.getColumns().add(bookAuthorColumn);
 
-
+		
+		int numOfBooks = bookCatalog.size();
+		
+		for(int x = 0; x < numOfBooks; x++)
+		{
+			availableBooksTableView.getItems().add(bookCatalog.get(x));
+		}
+		
+	
+	
 
 		
 		/* RETURN BOOK SECTION */
@@ -163,7 +188,7 @@ public class Main extends Application {
 		
 		primaryStage.setScene(scene1);
 		primaryStage.setResizable(false);
-		primaryStage.setTitle("Scene Toggling Example");
+		primaryStage.setTitle("Libaray Tracker");
 		primaryStage.show();
 	}
 
