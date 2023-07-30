@@ -45,10 +45,16 @@ public class Book {
 		this.lentDate = new Date();
 	}
 	
+
+	public void returnBook()
+	{
+		this.status = "available";
+		this.lentDate = null;
+	}
+	
 	public void setId(ArrayList<Book> bookCatalog)
 	{
 		int numOfBooks = bookCatalog.size();
-		System.out.println(numOfBooks);
 		int id = numOfBooks + 1;
 		this.id = id;
 	}

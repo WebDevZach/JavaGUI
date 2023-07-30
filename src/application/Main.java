@@ -23,7 +23,9 @@ public class Main extends Application {
 	private Scene scene1;
 	private Stage primaryStage;
 	private TableView<Book> availableBooksTableView;
+	private TableView<Book> unavailableBooksTableView;
 	private Scene rentBookScene;
+	private Scene returnBookScene;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -40,6 +42,12 @@ public class Main extends Application {
 		Book zeep = new Book("big", "chuck");
 		zeep.setId(bookCatalog);
 		bookCatalog.add(zeep);
+		
+		Book nope = new Book("pee", "shooter");
+		nope.setId(bookCatalog);
+		nope.rentBook();
+		bookCatalog.add(nope);
+	
 		
 		
 		/* MENU SECTION */
@@ -69,7 +77,7 @@ public class Main extends Application {
 		menuLayout.getChildren().add(addButton);
 		addButton.setOnAction(e -> primaryStage.setScene(addNewBookScene));
 
-		//Switch back menu button
+		//Switch back to menu button
 		Button switchToMenuFromAddBookButton = new Button("Menu");
 		switchToMenuFromAddBookButton.setOnAction(e -> primaryStage.setScene(scene1));
 		addBookHBox.getChildren().add(switchToMenuFromAddBookButton);
@@ -116,10 +124,10 @@ public class Main extends Application {
 		
 		//Menu button to switch to rent book scene 
 		Button rentButton = new Button("     Rent a book    ");
-		rentButton.setOnAction(e -> updateTable(bookCatalog));
+		rentButton.setOnAction(e -> updateRentTable(bookCatalog));
 		menuLayout.getChildren().add(rentButton);
 		
-		//Switch back menu button
+		//Switch back to menu button
 		Button switchToMenuFromRentBookButton = new Button("Menu");
 		switchToMenuFromRentBookButton.setOnAction(e -> primaryStage.setScene(scene1));
 		rentBookHBox.getChildren().add(switchToMenuFromRentBookButton);
@@ -165,18 +173,55 @@ public class Main extends Application {
 		/* RETURN BOOK SECTION */
 	
 		
-		VBox returnBookLayout = new VBox();
-		Scene returnBookScene = new Scene(returnBookLayout, 400, 300);
+		HBox returnBookHBox = new HBox();
+		returnBookHBox.setSpacing(10);
+		returnBookHBox.setPadding(new Insets(0, 0, 10, 250));
+
+		BorderPane returnBookBorderPane = new BorderPane();
+		returnBookBorderPane.setBottom(returnBookHBox);
+		returnBookScene = new Scene(returnBookBorderPane, 400, 300);
 		
 		//Menu button to switch to return book scene
 		Button returnButton = new Button("   Return a book   ");
-		returnButton.setOnAction(e -> primaryStage.setScene(returnBookScene));
+		returnButton.setOnAction(e -> updateReturnTable(bookCatalog));
 		menuLayout.getChildren().add(returnButton);
 
-		//Switch back menu button
+		//Switch back to menu button
 		Button switchToMenuFromReturnBookButton = new Button("Menu");
 		switchToMenuFromReturnBookButton.setOnAction(e -> primaryStage.setScene(scene1));
-		returnBookLayout.getChildren().add(switchToMenuFromReturnBookButton);
+		returnBookHBox.getChildren().add(switchToMenuFromReturnBookButton);
+		
+		//Button to return a book
+		Button returnBookButton = new Button("Rent Book");
+		returnBookButton.setOnAction(e -> returnBook(bookCatalog));
+		returnBookHBox.getChildren().add(returnBookButton);
+		
+		unavailableBooksTableView = new TableView();
+		returnBookBorderPane.setCenter(unavailableBooksTableView);
+		
+		unavailableBooksTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
+		TableColumn rentedBookIdColumn = new TableColumn<Book, String>("Id");
+		rentedBookIdColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("id"));
+		
+		TableColumn rentedBookTitleColumn = new TableColumn<Book, String>("Title");
+		rentedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
+		
+		TableColumn rentedBookAuthorColumn = new TableColumn<Book, String>("Author");
+		rentedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
+		
+		
+		
+		unavailableBooksTableView.getColumns().add(rentedBookIdColumn);
+		unavailableBooksTableView.getColumns().add(rentedBookTitleColumn);
+		unavailableBooksTableView.getColumns().add(rentedBookAuthorColumn);
+
+		
+		
+		for(int x = 0; x < numOfBooks; x++)
+		{
+			unavailableBooksTableView.getItems().add(bookCatalog.get(x));
+		}
 
 		
 		
@@ -206,22 +251,47 @@ public class Main extends Application {
 		primaryStage.setTitle("Libaray Tracker");
 		primaryStage.show();
 	}
+	
+	
 
-	public void updateTable(ArrayList<Book> bookCatalog)
-	{
+	public void updateRentTable(ArrayList<Book> bookCatalog) {
 		// Update the TableView data
-	    availableBooksTableView.getItems().clear();
-	    
-	    int numOfBooks = bookCatalog.size();
-	    
-	    for(int x = 0; x < numOfBooks; x++)
-	    {
-	    availableBooksTableView.getItems().add(bookCatalog.get(x));
-	    }
-	    
-	    // Switches to rent book scene
-	    primaryStage.setScene(rentBookScene);
+		availableBooksTableView.getItems().clear();
+
+		int numOfBooks = bookCatalog.size();
+
+		for (int x = 0; x < numOfBooks; x++) {
+			if (bookCatalog.get(x).getStatus() == "available") {
+				availableBooksTableView.getItems().add(bookCatalog.get(x));
+			}
+		}
+
+		// Switches to rent book scene
+		primaryStage.setScene(rentBookScene);
 	}
+	
+	
+	
+	
+	
+	
+	public void updateReturnTable(ArrayList<Book> bookCatalog) {
+		// Update the TableView data
+		unavailableBooksTableView.getItems().clear();
+
+		int numOfBooks = bookCatalog.size();
+
+		for (int x = 0; x < numOfBooks; x++) {
+			if (bookCatalog.get(x).getStatus() == "unavailable") {
+				unavailableBooksTableView.getItems().add(bookCatalog.get(x));
+			}
+		}
+
+		// Switches to return book scene
+		primaryStage.setScene(returnBookScene);
+	}
+
+	
 	
 	
 	
@@ -230,49 +300,46 @@ public class Main extends Application {
 		String author = authorTf.getText();
 
 		Book newBook = new Book(bookTitle, author);
-		
 
 		// Sets the id of the book
 		newBook.setId(bookCatalog);
 
 		bookCatalog.add(newBook);
 
-
 		bookTitleTf.clear();
 		authorTf.clear();
-		
+
 		return bookCatalog;
 	}
 
-	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog)
-	{
-		Book meep = availableBooksTableView.getSelectionModel().getSelectedItem();
-		
-		int numOfBooks = bookCatalog.size(); 
-		
-		System.out.println(meep.title);
-		
-		meep.rentBook();
-		
-//		System.out.println(row);
-//		System.out.println(bookCatalog.get(row).title);
-//		
-//		
-//		bookCatalog.get(row).rentBook();
-//		
-//		if(row >= 0)
-//		{
-//			availableBooksTableView.getItems().remove(row);
-//		}
-		
-		for (int y = 0; y < numOfBooks; y++)
-		{
-			System.out.println(bookCatalog.get(y).getTitle());
-			System.out.println(bookCatalog.get(y).getStatus());
-			
-		}
-		
+	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog) {
+		Book selectedBook = availableBooksTableView.getSelectionModel().getSelectedItem();
+		int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
+
+		selectedBook.rentBook();
+
+		deleteRow(row, availableBooksTableView);
+
 		return bookCatalog;
+	}
+	
+	public ArrayList<Book> returnBook(ArrayList<Book> bookCatalog) {
+		
+		Book selectedBook = unavailableBooksTableView.getSelectionModel().getSelectedItem();
+		int row = unavailableBooksTableView.getSelectionModel().getSelectedIndex();
+
+		selectedBook.returnBook();
+
+		deleteRow(row,unavailableBooksTableView);
+
+		return bookCatalog;
+	}
+
+	
+	void deleteRow(int row, TableView tableView) {
+		if (row >= 0) {
+			tableView.getItems().remove(row);
+		}
 	}
 	
 	
