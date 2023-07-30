@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Book {
@@ -32,9 +33,25 @@ public class Book {
 	{
 		return status;
 	}
+	
+	public int getId()
+	{
+		return id;
+	}
 
+	public void rentBook()
+	{
+		this.status = "unavailable";
+		this.lentDate = new Date();
+	}
 	
-	
+	public void setId(ArrayList<Book> bookCatalog)
+	{
+		int numOfBooks = bookCatalog.size();
+		System.out.println(numOfBooks);
+		int id = numOfBooks + 1;
+		this.id = id;
+	}
 	
 	
 }

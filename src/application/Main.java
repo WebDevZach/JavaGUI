@@ -33,9 +33,12 @@ public class Main extends Application {
 		ArrayList<Book> bookCatalog = new ArrayList<>();
 		
 		Book meep = new Book("jimmy", "johns");
-		Book zeep = new Book("big", "chuck");
-
+		meep.setId(bookCatalog);
 		bookCatalog.add(meep);
+		
+		
+		Book zeep = new Book("big", "chuck");
+		zeep.setId(bookCatalog);
 		bookCatalog.add(zeep);
 		
 		
@@ -132,12 +135,18 @@ public class Main extends Application {
 		
 		availableBooksTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		
+		TableColumn bookIdColumn = new TableColumn<Book, String>("Id");
+		bookIdColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("id"));
+		
 		TableColumn bookTitleColumn = new TableColumn<Book, String>("Title");
 		bookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
 		
 		TableColumn bookAuthorColumn = new TableColumn<Book, String>("Author");
 		bookAuthorColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
 		
+		
+		
+		availableBooksTableView.getColumns().add(bookIdColumn);
 		availableBooksTableView.getColumns().add(bookTitleColumn);
 		availableBooksTableView.getColumns().add(bookAuthorColumn);
 
@@ -202,8 +211,14 @@ public class Main extends Application {
 	{
 		// Update the TableView data
 	    availableBooksTableView.getItems().clear();
-	    availableBooksTableView.getItems().addAll(bookCatalog);
-
+	    
+	    int numOfBooks = bookCatalog.size();
+	    
+	    for(int x = 0; x < numOfBooks; x++)
+	    {
+	    availableBooksTableView.getItems().add(bookCatalog.get(x));
+	    }
+	    
 	    // Switches to rent book scene
 	    primaryStage.setScene(rentBookScene);
 	}
@@ -215,12 +230,10 @@ public class Main extends Application {
 		String author = authorTf.getText();
 
 		Book newBook = new Book(bookTitle, author);
-
-		int numOfBooks = bookCatalog.size();
-		;
+		
 
 		// Sets the id of the book
-		newBook.id = numOfBooks + 1;
+		newBook.setId(bookCatalog);
 
 		bookCatalog.add(newBook);
 
@@ -235,6 +248,9 @@ public class Main extends Application {
 	{
 		int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
 		System.out.println(row);
+		System.out.println(bookCatalog.get(row).title);
+		
+		bookCatalog.get(row).rentBook();
 		
 		return bookCatalog;
 	}
