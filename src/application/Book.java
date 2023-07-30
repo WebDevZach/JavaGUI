@@ -19,6 +19,11 @@ public class Book {
 		this.status = "available";
 	}
 	
+	public Date getDate()
+	{
+		return lentDate;
+	}
+	
 	public String getTitle()
 	{
 		return title;

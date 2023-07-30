@@ -12,7 +12,11 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -157,17 +161,10 @@ public class Main extends Application {
 		availableBooksTableView.getColumns().add(bookIdColumn);
 		availableBooksTableView.getColumns().add(bookTitleColumn);
 		availableBooksTableView.getColumns().add(bookAuthorColumn);
+		
+	    Label customMessageForRentTable = new Label("All books are currently being rented");
+        availableBooksTableView.setPlaceholder(customMessageForRentTable);
 
-		
-		int numOfBooks = bookCatalog.size();
-		
-		for(int x = 0; x < numOfBooks; x++)
-		{
-			availableBooksTableView.getItems().add(bookCatalog.get(x));
-		}
-		
-	
-	
 
 		
 		/* RETURN BOOK SECTION */
@@ -192,7 +189,7 @@ public class Main extends Application {
 		returnBookHBox.getChildren().add(switchToMenuFromReturnBookButton);
 		
 		//Button to return a book
-		Button returnBookButton = new Button("Rent Book");
+		Button returnBookButton = new Button("Return Book");
 		returnBookButton.setOnAction(e -> returnBook(bookCatalog));
 		returnBookHBox.getChildren().add(returnBookButton);
 		
@@ -210,21 +207,22 @@ public class Main extends Application {
 		TableColumn rentedBookAuthorColumn = new TableColumn<Book, String>("Author");
 		rentedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
 		
+		TableColumn lentDateColumn = new TableColumn<Book, Date>("Lent Date");
+		lentDateColumn.setCellValueFactory(new PropertyValueFactory<Book, Date>("date"));
+		
 		
 		
 		unavailableBooksTableView.getColumns().add(rentedBookIdColumn);
 		unavailableBooksTableView.getColumns().add(rentedBookTitleColumn);
 		unavailableBooksTableView.getColumns().add(rentedBookAuthorColumn);
+		unavailableBooksTableView.getColumns().add(lentDateColumn);
 
+		  
+        Label customMessageForReturnTable = new Label("All books have been returned");
+        unavailableBooksTableView.setPlaceholder(customMessageForReturnTable);
 		
 		
-		for(int x = 0; x < numOfBooks; x++)
-		{
-			unavailableBooksTableView.getItems().add(bookCatalog.get(x));
-		}
 
-		
-		
 		/* LOOKUP BOOK SECTION */
 		
 		
@@ -253,7 +251,6 @@ public class Main extends Application {
 	}
 	
 	
-
 	public void updateRentTable(ArrayList<Book> bookCatalog) {
 		// Update the TableView data
 		availableBooksTableView.getItems().clear();
@@ -269,12 +266,7 @@ public class Main extends Application {
 		// Switches to rent book scene
 		primaryStage.setScene(rentBookScene);
 	}
-	
-	
-	
-	
-	
-	
+
 	public void updateReturnTable(ArrayList<Book> bookCatalog) {
 		// Update the TableView data
 		unavailableBooksTableView.getItems().clear();
@@ -291,13 +283,13 @@ public class Main extends Application {
 		primaryStage.setScene(returnBookScene);
 	}
 
-	
-	
-	
-	
 	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog) {
 		String bookTitle = bookTitleTf.getText();
 		String author = authorTf.getText();
+
+		if (bookTitle == "" || author == "") {
+			return bookCatalog;
+		}
 
 		Book newBook = new Book(bookTitle, author);
 
@@ -313,37 +305,39 @@ public class Main extends Application {
 	}
 
 	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog) {
-		Book selectedBook = availableBooksTableView.getSelectionModel().getSelectedItem();
-		int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
+		try {
+			Book selectedBook = availableBooksTableView.getSelectionModel().getSelectedItem();
+			int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
 
-		selectedBook.rentBook();
+			selectedBook.rentBook();
 
-		deleteRow(row, availableBooksTableView);
+			deleteRow(row, availableBooksTableView);
+		} catch (Exception e) {
+		}
 
 		return bookCatalog;
 	}
-	
+
 	public ArrayList<Book> returnBook(ArrayList<Book> bookCatalog) {
-		
-		Book selectedBook = unavailableBooksTableView.getSelectionModel().getSelectedItem();
-		int row = unavailableBooksTableView.getSelectionModel().getSelectedIndex();
+		try {
+			Book selectedBook = unavailableBooksTableView.getSelectionModel().getSelectedItem();
+			int row = unavailableBooksTableView.getSelectionModel().getSelectedIndex();
 
-		selectedBook.returnBook();
+			selectedBook.returnBook();
 
-		deleteRow(row,unavailableBooksTableView);
+			deleteRow(row, unavailableBooksTableView);
+		} catch (Exception e) {
+		}
 
 		return bookCatalog;
 	}
 
-	
-	void deleteRow(int row, TableView tableView) {
+	void deleteRow(int row, TableView<Book> tableView) {
 		if (row >= 0) {
 			tableView.getItems().remove(row);
 		}
 	}
-	
-	
-	
+
 	public static void main(String[] args) {
 		launch(args);
 
