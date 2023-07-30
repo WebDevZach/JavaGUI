@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,16 +12,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import java.util.ArrayList;
 
 public class Main extends Application {
+	
+	
+	private TextField bookTitleTf;
+	private TextField authorTf;
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+
 
 	@Override
 	public void start(Stage primaryStage) {
+		
+		Book[] bookCatalog = new Book[0];
 
 		VBox layout1 = new VBox();
 		layout1.setSpacing(35);
@@ -56,11 +63,15 @@ public class Main extends Application {
 	
 		
 		BorderPane addNewBookLayout = new BorderPane();
-		StackPane stackPane = new StackPane();
+		HBox hBox = new HBox();
+		hBox.setSpacing(10);
+		Button addNewBook = new Button("Add Book");
+		addNewBook.setOnAction(e -> addNewBook(bookCatalog));
 		
-		stackPane.getChildren().add(switchToMenuFromAddBookButton);
-		addNewBookLayout.setBottom(stackPane);
-		stackPane.setPadding(new Insets(0, 0, 20, 300));
+		hBox.getChildren().add(switchToMenuFromAddBookButton);
+		hBox.getChildren().add(addNewBook);
+		addNewBookLayout.setBottom(hBox);
+		hBox.setPadding(new Insets(0, 0, 20, 200));
 
 		Scene addNewBookscene = new Scene(addNewBookLayout, 400, 300);
 		
@@ -72,8 +83,8 @@ public class Main extends Application {
 		Label bookTitleLabel = new Label("Title");
 		Label authorLabel = new Label("Author");
 		
-		TextField bookTitleTf = new TextField();
-		TextField authorTf = new TextField();
+		bookTitleTf = new TextField();
+		authorTf = new TextField();
 		
 		gridPane.add(bookTitleLabel, 0, 0);
 		gridPane.add(authorLabel, 0, 1);
@@ -116,4 +127,49 @@ public class Main extends Application {
 		primaryStage.setTitle("Scene Toggling Example");
 		primaryStage.show();
 	}
+	
+	
+	public Book[] addNewBook(Book[] bookCatalog)
+	{
+		String bookTitle = bookTitleTf.getText();
+		String author =  authorTf.getText();
+		
+		Book newBook = new Book(bookTitle, author);
+		
+		
+
+		int numOfBooks = bookCatalog.length;
+		
+	
+		
+	
+
+		// Sets the id of the book
+		newBook.id = numOfBooks + 1;
+
+		// Creates a new array that is one element bigger to hold the new book
+		Book[] newBookCatalog = new Book[numOfBooks + 1];
+
+		int x;
+
+		// Copies all existing elements into the new array
+		for (x = 0; x < numOfBooks; x++) {
+			newBookCatalog[x] = bookCatalog[x];
+		}
+
+		// Puts the new book at the end of the array
+		newBookCatalog[x] = newBook;
+		
+		System.out.println(bookCatalog[0].title);
+
+		return newBookCatalog;
+	}
+	
+	
+	public static void main(String[] args) {
+		launch(args);
+		
+	}
+	
+
 }
