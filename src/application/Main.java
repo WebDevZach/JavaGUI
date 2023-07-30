@@ -12,24 +12,25 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+
 
 public class Main extends Application {
 
 	private TextField bookTitleTf;
 	private TextField authorTf;
-	private Scene scene1;
+	private Scene mainMenuScene;
 	private Stage primaryStage;
 	private TableView<Book> availableBooksTableView;
 	private TableView<Book> unavailableBooksTableView;
 	private Scene rentBookScene;
 	private Scene returnBookScene;
+	private Scene searchScene;
+	private TextField searchBarTextField;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -61,7 +62,7 @@ public class Main extends Application {
 		BorderPane menuBorderPane = new BorderPane();
 		menuBorderPane.setTop(menuLayout);
 		menuLayout.setPadding(new Insets(30, 0, 0, 150));
-		scene1 = new Scene(menuBorderPane, 400, 300);
+		mainMenuScene = new Scene(menuBorderPane, 400, 300);
 
 		
 		
@@ -83,7 +84,7 @@ public class Main extends Application {
 
 		//Switch back to menu button
 		Button switchToMenuFromAddBookButton = new Button("Menu");
-		switchToMenuFromAddBookButton.setOnAction(e -> primaryStage.setScene(scene1));
+		switchToMenuFromAddBookButton.setOnAction(e -> primaryStage.setScene(mainMenuScene));
 		addBookHBox.getChildren().add(switchToMenuFromAddBookButton);
 		
 		//Button to add a new book to the catalog
@@ -133,7 +134,7 @@ public class Main extends Application {
 		
 		//Switch back to menu button
 		Button switchToMenuFromRentBookButton = new Button("Menu");
-		switchToMenuFromRentBookButton.setOnAction(e -> primaryStage.setScene(scene1));
+		switchToMenuFromRentBookButton.setOnAction(e -> primaryStage.setScene(mainMenuScene));
 		rentBookHBox.getChildren().add(switchToMenuFromRentBookButton);
 		
 		//Button to rent a book
@@ -185,7 +186,7 @@ public class Main extends Application {
 
 		//Switch back to menu button
 		Button switchToMenuFromReturnBookButton = new Button("Menu");
-		switchToMenuFromReturnBookButton.setOnAction(e -> primaryStage.setScene(scene1));
+		switchToMenuFromReturnBookButton.setOnAction(e -> primaryStage.setScene(mainMenuScene));
 		returnBookHBox.getChildren().add(switchToMenuFromReturnBookButton);
 		
 		//Button to return a book
@@ -225,26 +226,47 @@ public class Main extends Application {
 
 		/* LOOKUP BOOK SECTION */
 		
+        HBox searchHBox = new HBox();
+		searchHBox.setSpacing(10);
+		searchHBox.setPadding(new Insets(0, 0, 10, 250));
+
+		BorderPane searchBorderPane = new BorderPane();
+		searchBorderPane.setBottom(searchHBox);
+		searchScene = new Scene(searchBorderPane, 400, 300);
 		
-		VBox lookupBook = new VBox();
-		Scene lookupBookScene = new Scene(lookupBook, 400, 300);
 		
 		//Menu button to switch to lookup scene
 		Button searchButton = new Button("  Look up a book  ");
-		searchButton.setOnAction(e -> primaryStage.setScene(lookupBookScene));
+		searchButton.setOnAction(e -> primaryStage.setScene(searchScene));
 		menuLayout.getChildren().add(searchButton);
 		
 		//Switch back menu button
 		Button switchToMenuFromLookupBookButton = new Button("Menu");
-		switchToMenuFromLookupBookButton.setOnAction(e -> primaryStage.setScene(scene1));
-		lookupBook.getChildren().add(switchToMenuFromLookupBookButton);
+		switchToMenuFromLookupBookButton.setOnAction(e -> primaryStage.setScene(mainMenuScene));
+		searchHBox.getChildren().add(switchToMenuFromLookupBookButton);
 		
+		//Button to return a book
+		Button searchBookButton = new Button("Find Book");
+		searchBookButton.setOnAction(e -> returnBook(bookCatalog));
+		searchHBox.getChildren().add(searchBookButton);
+		
+		//Search Bar
+		HBox searchBarHBox = new HBox();
+		searchBarHBox.setSpacing(10);
+		
+		Label searchBarLabel = new Label("Search Bar");
+		searchBarTextField = new TextField();
 
-
+		searchBarHBox.getChildren().add(searchBarLabel);
+		searchBarHBox.getChildren().add(searchBarTextField);
+		
+		searchBorderPane.setTop(searchBarHBox);
+		searchBarHBox.setPadding(new Insets(10, 0, 0, 50));
+		
 		/* PRIMARY STAGE */
 		
 		
-		primaryStage.setScene(scene1);
+		primaryStage.setScene(mainMenuScene);
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Libaray Tracker");
 		primaryStage.show();

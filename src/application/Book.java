@@ -17,6 +17,7 @@ public class Book {
 		this.title = title;
 		this.author = author;
 		this.status = "available";
+		this.lentDate = null;
 	}
 	
 	public Date getDate()
