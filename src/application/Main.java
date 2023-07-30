@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
 import javafx.scene.control.TableView;
@@ -27,10 +26,11 @@ public class Main extends Application {
 	private Stage primaryStage;
 	private TableView<Book> availableBooksTableView;
 	private TableView<Book> unavailableBooksTableView;
+	private TableView<Book> foundTableView;
 	private Scene rentBookScene;
 	private Scene returnBookScene;
 	private Scene searchScene;
-	private TextField searchBarTextField;
+	private TextField searchBarTf;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -245,9 +245,9 @@ public class Main extends Application {
 		switchToMenuFromLookupBookButton.setOnAction(e -> primaryStage.setScene(mainMenuScene));
 		searchHBox.getChildren().add(switchToMenuFromLookupBookButton);
 		
-		//Button to return a book
+		//Button to search for a book
 		Button searchBookButton = new Button("Find Book");
-		searchBookButton.setOnAction(e -> returnBook(bookCatalog));
+		searchBookButton.setOnAction(e -> searchBook(bookCatalog));
 		searchHBox.getChildren().add(searchBookButton);
 		
 		//Search Bar
@@ -255,13 +255,43 @@ public class Main extends Application {
 		searchBarHBox.setSpacing(10);
 		
 		Label searchBarLabel = new Label("Search Bar");
-		searchBarTextField = new TextField();
+		searchBarTf = new TextField();
 
 		searchBarHBox.getChildren().add(searchBarLabel);
-		searchBarHBox.getChildren().add(searchBarTextField);
+		searchBarHBox.getChildren().add(searchBarTf);
 		
 		searchBorderPane.setTop(searchBarHBox);
-		searchBarHBox.setPadding(new Insets(10, 0, 0, 50));
+		searchBarHBox.setPadding(new Insets(10, 0, 0, 80));
+		
+		//Table view
+		foundTableView = new TableView();
+		searchBorderPane.setCenter(foundTableView);
+		
+		foundTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
+		TableColumn foundBookIdColumn = new TableColumn<Book, String>("Id");
+		foundBookIdColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("id"));
+		
+		TableColumn foundBookTitleColumn = new TableColumn<Book, String>("Title");
+		foundBookTitleColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
+		
+		TableColumn foundBookAuthorColumn = new TableColumn<Book, String>("Author");
+		foundBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
+		
+		TableColumn foundStatusColumn = new TableColumn<Book, Date>("Status");
+		foundStatusColumn.setCellValueFactory(new PropertyValueFactory<Book, Date>("status"));
+		
+		
+		
+		foundTableView.getColumns().add(foundBookIdColumn);
+		foundTableView.getColumns().add(foundBookTitleColumn);
+		foundTableView.getColumns().add(foundBookAuthorColumn);
+		foundTableView.getColumns().add(foundStatusColumn);
+
+		  
+        Label customMessageForSearchTable = new Label("No matches found");
+        foundTableView.setPlaceholder(customMessageForSearchTable);
+		
 		
 		/* PRIMARY STAGE */
 		
@@ -271,7 +301,6 @@ public class Main extends Application {
 		primaryStage.setTitle("Libaray Tracker");
 		primaryStage.show();
 	}
-	
 	
 	public void updateRentTable(ArrayList<Book> bookCatalog) {
 		// Update the TableView data
@@ -352,6 +381,24 @@ public class Main extends Application {
 		}
 
 		return bookCatalog;
+	}
+
+	public void searchBook(ArrayList<Book> bookCatalog) {
+		try {
+			String searchValue = searchBarTf.getText();
+			
+			foundTableView.getItems().clear();
+
+			int numOfBooks = bookCatalog.size();
+
+			for (int x = 0; x < numOfBooks; x++) {
+				if (bookCatalog.get(x).getTitle().contains(searchValue) || bookCatalog.get(x).getAuthor().contains(searchValue)) {
+					foundTableView.getItems().add(bookCatalog.get(x));
+				}
+			}
+		} catch (Exception e) {
+		}
+
 	}
 
 	void deleteRow(int row, TableView<Book> tableView) {
