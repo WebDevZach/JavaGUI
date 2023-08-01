@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -65,22 +66,26 @@ public class Main extends Application {
 				String bookStatus = scanner.nextLine();
 				String date = scanner.nextLine();
 			
-				Date lendDate;
 				
-				if(date == "null")
+				Book newBook = new Book(bookId, bookTitle, bookAuthor, bookStatus);
+				
+				if(date.equals("null"))
 				{
-					lendDate = null;
+					newBook.setDateNull();
+					System.out.println("1");
 				}
 				else 
 				{
+					System.out.println("2");
 					String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
 					SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-					lendDate = sdf.parse(date);
+					Date lendDate = sdf.parse(date);
+					newBook.setDate(lendDate);
 				}
 				
 				
 				
-				Book newBook = new Book(bookId, bookTitle, bookAuthor, bookStatus, lendDate);
+				
 				
 				System.out.println(newBook.getId());
 				System.out.println(newBook.getTitle());
@@ -382,7 +387,7 @@ public class Main extends Application {
 		primaryStage.setScene(returnBookScene);
 	}
 
-	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog, String fileName) {
+	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog,String fileName) {
 		String bookTitle = bookTitleTf.getText();
 		String author = authorTf.getText();
 
@@ -398,13 +403,16 @@ public class Main extends Application {
 		try {
 			File file = new File(fileName); 
 
-			PrintWriter fileWriter = new PrintWriter(file);
-			fileWriter.write(newBook.getId());
-			fileWriter.write(newBook.getTitle());
-			fileWriter.write(newBook.getAuthor());
-			fileWriter.write(newBook.getStatus());
-			fileWriter.write("null");
-			fileWriter.close();
+			FileWriter fileWriter = new FileWriter(fileName, true);
+
+            PrintWriter output = new PrintWriter(fileWriter);
+            
+            output.println(newBook.getId());
+            output.println(newBook.getTitle());
+            output.println(newBook.getAuthor());
+            output.println(newBook.getStatus());
+            output.println("null");
+            output.close();
 		} catch (IOException e) {
 			
 		}

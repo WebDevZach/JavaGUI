@@ -19,23 +19,28 @@ public class Book {
 		this.lentDate = null;
 	}
 	
-	Book(int bookId, String title, String author, String status, Date lendDate) {
+	Book(int bookId, String title, String author, String status) {
 		this.id = bookId;
 		this.title = title;
 		this.author = author;
 		this.status = "available";
-		this.lentDate = lendDate;
 	}
 
 	public Date getDate() {
 		return lentDate;
 	}
 	
-	public void setDate()
+	public void setDateNull()
 	{
 		this.lentDate = null;
 	}
 
+	
+	public void setDate(Date lentDate)
+	{
+		this.lentDate = lentDate;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
