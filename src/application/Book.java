@@ -23,7 +23,7 @@ public class Book {
 		this.id = bookId;
 		this.title = title;
 		this.author = author;
-		this.status = "available";
+		this.status = status;
 	}
 
 	public Date getDate() {
