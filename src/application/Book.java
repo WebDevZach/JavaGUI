@@ -30,6 +30,11 @@ public class Book {
 	public Date getDate() {
 		return lentDate;
 	}
+	
+	public void setDate()
+	{
+		this.lentDate = null;
+	}
 
 	public String getTitle() {
 		return title;

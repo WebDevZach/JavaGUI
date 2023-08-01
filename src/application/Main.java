@@ -50,14 +50,14 @@ public class Main extends Application {
 
 		ArrayList<Book> bookCatalog = new ArrayList<>();
 		
-		String fileName = "BookCatalog.txt"; // Specify the file name you want to create
+		String fileName = "BookCatalog.txt"; 
 
 
 		try {
-			File file = new File(fileName); // Create a File object with the specified file name
-			Scanner scanner = new Scanner(file); // Create a Scanner to read data from the file
+			File file = new File(fileName); 
+			Scanner scanner = new Scanner(file); 
 
-			// Read the content from the file line by line
+			
 			while (scanner.hasNextLine()) {
 				int bookId = Integer.parseInt(scanner.nextLine());
 				String bookTitle = scanner.nextLine();
@@ -65,10 +65,20 @@ public class Main extends Application {
 				String bookStatus = scanner.nextLine();
 				String date = scanner.nextLine();
 			
+				Date lendDate;
 				
-				String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
-				SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-	            Date lendDate = sdf.parse(date);
+				if(date == "null")
+				{
+					lendDate = null;
+				}
+				else 
+				{
+					String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+					SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+					lendDate = sdf.parse(date);
+				}
+				
+				
 				
 				Book newBook = new Book(bookId, bookTitle, bookAuthor, bookStatus, lendDate);
 				
@@ -77,6 +87,9 @@ public class Main extends Application {
 				System.out.println(newBook.getAuthor());
 				System.out.println(newBook.getStatus());
 				System.out.println(newBook.getDate());
+				
+				bookCatalog.add(newBook);
+				
 			}
 
 	            scanner.close(); // Close the scanner after reading
@@ -124,7 +137,7 @@ public class Main extends Application {
 		
 		//Button to add a new book to the catalog
 		Button addNewBookButton = new Button("Add Book");
-		addNewBookButton.setOnAction(e -> addNewBook(bookCatalog));
+		addNewBookButton.setOnAction(e -> addNewBook(bookCatalog, fileName));
 		addBookHBox.getChildren().add(addNewBookButton);
 
 		//Grid layout for text fields
@@ -369,7 +382,7 @@ public class Main extends Application {
 		primaryStage.setScene(returnBookScene);
 	}
 
-	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog) {
+	public ArrayList<Book> addNewBook(ArrayList<Book> bookCatalog, String fileName) {
 		String bookTitle = bookTitleTf.getText();
 		String author = authorTf.getText();
 
@@ -378,19 +391,25 @@ public class Main extends Application {
 		}
 
 		Book newBook = new Book(bookTitle, author);
+		
+		// Sets the id of the book
+		newBook.setId(bookCatalog);
 
 		try {
 			File file = new File(fileName); 
 
 			PrintWriter fileWriter = new PrintWriter(file);
-			fileWriter.write("This is the content of the file.\nYou can add more lines here.");
+			fileWriter.write(newBook.getId());
+			fileWriter.write(newBook.getTitle());
+			fileWriter.write(newBook.getAuthor());
+			fileWriter.write(newBook.getStatus());
+			fileWriter.write("null");
 			fileWriter.close();
 		} catch (IOException e) {
-			System.out.println("An error occurred while creating the file: " + e.getMessage());
+			
 		}
 		   
-		// Sets the id of the book
-		newBook.setId(bookCatalog);
+		
 
 		bookCatalog.add(newBook);
 
