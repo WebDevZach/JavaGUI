@@ -50,60 +50,41 @@ public class Main extends Application {
 		this.primaryStage = primaryStage;
 
 		ArrayList<Book> bookCatalog = new ArrayList<>();
-		
-		String fileName = "BookCatalog.txt"; 
 
+		String fileName = "BookCatalog.txt";
 
 		try {
-			File file = new File(fileName); 
-			Scanner scanner = new Scanner(file); 
+			File file = new File(fileName);
+			Scanner scanner = new Scanner(file);
 
-			
 			while (scanner.hasNextLine()) {
 				int bookId = Integer.parseInt(scanner.nextLine());
 				String bookTitle = scanner.nextLine();
 				String bookAuthor = scanner.nextLine();
 				String bookStatus = scanner.nextLine();
 				String date = scanner.nextLine();
-			
-				
+
 				Book newBook = new Book(bookId, bookTitle, bookAuthor, bookStatus);
-				
-				if(date.equals("null"))
-				{
+
+				if (date.equals("null")) {
 					newBook.setDateNull();
-					System.out.println("1");
-				}
-				else 
-				{
-					System.out.println("2");
+				} else {
 					String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
 					SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 					Date lendDate = sdf.parse(date);
 					newBook.setDate(lendDate);
 				}
-				
-				
-				
-				
-				
-				System.out.println(newBook.getId());
-				System.out.println(newBook.getTitle());
-				System.out.println(newBook.getAuthor());
-				System.out.println(newBook.getStatus());
-				System.out.println(newBook.getDate());
-				
+
 				bookCatalog.add(newBook);
-				
 			}
 
-	            scanner.close(); // Close the scanner after reading
+			scanner.close();
 
-	        } catch (FileNotFoundException e) {
-	            System.out.println("The file does not exist or cannot be read: " + e.getMessage());
-	        } catch (ParseException e1) {
-				e1.printStackTrace();
-			}
+		} catch (FileNotFoundException e) {
+			System.out.println("The file does not exist or cannot be read: " + e.getMessage());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
 			
 			
 			
@@ -192,7 +173,7 @@ public class Main extends Application {
 		
 		//Button to rent a book
 		Button rentBookButton = new Button("Rent Book");
-		rentBookButton.setOnAction(e -> rentBook(bookCatalog));
+		rentBookButton.setOnAction(e -> rentBook(bookCatalog, fileName));
 		rentBookHBox.getChildren().add(rentBookButton);
 		
 		//Table view for available books
@@ -427,7 +408,7 @@ public class Main extends Application {
 		return bookCatalog;
 	}
 
-	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog) {
+	public ArrayList<Book> rentBook(ArrayList<Book> bookCatalog, String fileName) {
 		try {
 			Book selectedBook = availableBooksTableView.getSelectionModel().getSelectedItem();
 			int row = availableBooksTableView.getSelectionModel().getSelectedIndex();
@@ -436,6 +417,34 @@ public class Main extends Application {
 
 			deleteRow(row, availableBooksTableView);
 		} catch (Exception e) {
+		}
+
+		File file = new File(fileName);
+
+		PrintWriter output;
+		try {
+			output = new PrintWriter(fileName);
+
+			int numOfBooks = bookCatalog.size();
+
+			for (int x = 0; x < numOfBooks; x++) {
+				output.println(bookCatalog.get(x).getId());
+				output.println(bookCatalog.get(x).getTitle());
+				output.println(bookCatalog.get(x).getAuthor());
+				output.println(bookCatalog.get(x).getStatus());
+
+				Date date = bookCatalog.get(x).getDate();
+
+				String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+				SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+				String lendDateString = sdf.format(date);
+	
+				output.println(lendDateString);
+			}
+			output.close();
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
 		}
 
 		return bookCatalog;
