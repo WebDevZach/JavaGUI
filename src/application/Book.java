@@ -18,6 +18,14 @@ public class Book {
 		this.status = "available";
 		this.lentDate = null;
 	}
+	
+	Book(int bookId, String title, String author, String status, Date lendDate) {
+		this.id = bookId;
+		this.title = title;
+		this.author = author;
+		this.status = "available";
+		this.lentDate = lendDate;
+	}
 
 	public Date getDate() {
 		return lentDate;

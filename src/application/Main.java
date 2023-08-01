@@ -12,8 +12,19 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -39,21 +50,45 @@ public class Main extends Application {
 
 		ArrayList<Book> bookCatalog = new ArrayList<>();
 		
-		Book meep = new Book("jimmy", "johns");
-		meep.setId(bookCatalog);
-		bookCatalog.add(meep);
-		
-		
-		Book zeep = new Book("big", "chuck");
-		zeep.setId(bookCatalog);
-		bookCatalog.add(zeep);
-		
-		Book nope = new Book("pee", "shooter");
-		nope.setId(bookCatalog);
-		nope.rentBook();
-		bookCatalog.add(nope);
-	
-		
+		String fileName = "BookCatalog.txt"; // Specify the file name you want to create
+
+
+		try {
+			File file = new File(fileName); // Create a File object with the specified file name
+			Scanner scanner = new Scanner(file); // Create a Scanner to read data from the file
+
+			// Read the content from the file line by line
+			while (scanner.hasNextLine()) {
+				int bookId = Integer.parseInt(scanner.nextLine());
+				String bookTitle = scanner.nextLine();
+				String bookAuthor = scanner.nextLine();
+				String bookStatus = scanner.nextLine();
+				String date = scanner.nextLine();
+			
+				
+				String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+				SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+	            Date lendDate = sdf.parse(date);
+				
+				Book newBook = new Book(bookId, bookTitle, bookAuthor, bookStatus, lendDate);
+				
+				System.out.println(newBook.getId());
+				System.out.println(newBook.getTitle());
+				System.out.println(newBook.getAuthor());
+				System.out.println(newBook.getStatus());
+				System.out.println(newBook.getDate());
+			}
+
+	            scanner.close(); // Close the scanner after reading
+
+	        } catch (FileNotFoundException e) {
+	            System.out.println("The file does not exist or cannot be read: " + e.getMessage());
+	        } catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			
+			
+			
 		
 		/* MENU SECTION */
 
@@ -344,6 +379,16 @@ public class Main extends Application {
 
 		Book newBook = new Book(bookTitle, author);
 
+		try {
+			File file = new File(fileName); 
+
+			PrintWriter fileWriter = new PrintWriter(file);
+			fileWriter.write("This is the content of the file.\nYou can add more lines here.");
+			fileWriter.close();
+		} catch (IOException e) {
+			System.out.println("An error occurred while creating the file: " + e.getMessage());
+		}
+		   
 		// Sets the id of the book
 		newBook.setId(bookCatalog);
 
