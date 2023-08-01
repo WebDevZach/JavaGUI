@@ -92,8 +92,8 @@ public class Main extends Application {
 		menuLayout.setSpacing(35);
 		BorderPane menuBorderPane = new BorderPane();
 		menuBorderPane.setTop(menuLayout);
-		menuLayout.setPadding(new Insets(30, 0, 0, 150));
-		mainMenuScene = new Scene(menuBorderPane, 400, 300);
+		menuLayout.setPadding(new Insets(30, 0, 0, 200));
+		mainMenuScene = new Scene(menuBorderPane, 525, 300);
 
 		
 		
@@ -102,11 +102,11 @@ public class Main extends Application {
 		
 		HBox addBookHBox = new HBox();
 		addBookHBox.setSpacing(10);
-		addBookHBox.setPadding(new Insets(0, 0, 20, 200));
+		addBookHBox.setPadding(new Insets(0, 0, 20, 350));
 
 		BorderPane addBookBorderPane = new BorderPane();
 		addBookBorderPane.setBottom(addBookHBox);
-		Scene addNewBookScene = new Scene(addBookBorderPane, 400, 300);
+		Scene addNewBookScene = new Scene(addBookBorderPane, 525, 300);
 		
 		//Menu button to switch to add new book scene
 		Button addButton = new Button(" Add a new book ");
@@ -143,7 +143,7 @@ public class Main extends Application {
 
 		//Adds grid to layout
 		addBookBorderPane.setCenter(addBookGridPane);
-		addBookGridPane.setPadding(new Insets(100, 0, 0, 90));
+		addBookGridPane.setPadding(new Insets(100, 0, 0, 125));
 
 		
 		
@@ -152,11 +152,11 @@ public class Main extends Application {
 	
 		HBox rentBookHBox = new HBox();
 		rentBookHBox.setSpacing(10);
-		rentBookHBox.setPadding(new Insets(0, 0, 10, 250));
+		rentBookHBox.setPadding(new Insets(0, 0, 10, 350));
 
 		BorderPane rentBookBorderPane = new BorderPane();
 		rentBookBorderPane.setBottom(rentBookHBox);
-		rentBookScene = new Scene(rentBookBorderPane, 400, 300);
+		rentBookScene = new Scene(rentBookBorderPane, 525, 300);
 		
 		//Menu button to switch to rent book scene 
 		Button rentButton = new Button("     Rent a book    ");
@@ -207,11 +207,11 @@ public class Main extends Application {
 		
 		HBox returnBookHBox = new HBox();
 		returnBookHBox.setSpacing(10);
-		returnBookHBox.setPadding(new Insets(0, 0, 10, 250));
+		returnBookHBox.setPadding(new Insets(0, 0, 10, 350));
 
 		BorderPane returnBookBorderPane = new BorderPane();
 		returnBookBorderPane.setBottom(returnBookHBox);
-		returnBookScene = new Scene(returnBookBorderPane, 400, 300);
+		returnBookScene = new Scene(returnBookBorderPane, 525, 300);
 		
 		//Menu button to switch to return book scene
 		Button returnButton = new Button("   Return a book   ");
@@ -265,11 +265,11 @@ public class Main extends Application {
 		
         HBox searchHBox = new HBox();
 		searchHBox.setSpacing(10);
-		searchHBox.setPadding(new Insets(0, 0, 10, 250));
+		searchHBox.setPadding(new Insets(0, 0, 10, 350));
 
 		BorderPane searchBorderPane = new BorderPane();
 		searchBorderPane.setBottom(searchHBox);
-		searchScene = new Scene(searchBorderPane, 400, 300);
+		searchScene = new Scene(searchBorderPane, 525, 300);
 		
 		
 		//Menu button to switch to lookup scene
